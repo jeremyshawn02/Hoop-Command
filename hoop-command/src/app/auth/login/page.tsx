@@ -9,6 +9,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from 'yup';
+import { loginUser } from "../api/loginUser";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface FormProps{
     email: string
@@ -21,6 +24,7 @@ const validationSchema = yup.object().shape({
 })
 
 export default function LoginPage(){
+    const router = useRouter()
     const [isLoading, setIsLoading] = useState(true)
     const [isMounted, setIsMounted] = useState(false)
 
@@ -31,7 +35,7 @@ export default function LoginPage(){
     useEffect(() => {
         setTimeout(() => {
             setIsLoading(false)
-        }, 1000);
+        }, 500);
     }, [])
 
     const form = useForm<FormProps>({
@@ -44,8 +48,16 @@ export default function LoginPage(){
         resolver: yupResolver<any, any, any>(validationSchema)
     })
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
+        setIsLoading(true)
 
+        await loginUser(form.getValues()).then(() => {
+            router.push('/dashboard')
+        }).catch(() => {
+            toast('Login failed!')
+        })
+
+        setIsLoading(false)
     }
 
     if(!isMounted) return null
@@ -84,8 +96,8 @@ export default function LoginPage(){
                             </Button>
                         </form>
                     </Form>
-                    <h6 className="text-gray-300 text-center mt-5">
-                        Don&apos;t have an account yet? Register <Link className="underline" href={'/register'}>here</Link>
+                    <h6 className="text-gray-300 text-center text-sm mt-5">
+                        Don&apos;t have an account yet? Register <Link className="underline" href={'/auth/register'}>here</Link>
                     </h6>
                 </div>
             </div>

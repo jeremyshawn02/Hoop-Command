@@ -50,7 +50,7 @@ export default function Navbar(){
             </ul>
             <button 
                 className={`bg-white hover:bg-gray-300 cursor-pointer transition-all rounded-full w-[150px] text-center py-2 font-bold z-10`}
-                onClick={() => router.push('/login')}    
+                onClick={() => router.push('/auth/login')}    
             >
                 Login
             </button>
