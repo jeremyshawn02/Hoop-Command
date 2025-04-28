@@ -1,7 +1,6 @@
 import { ResponseProps } from "@/lib/response"
 import axios from "axios"
 
-
 export interface RegisterProps{
     name: string
     email: string
